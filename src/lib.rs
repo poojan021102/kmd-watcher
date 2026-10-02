@@ -172,8 +172,14 @@ where
 
     // Loop through to read the key events
     loop {
-        // For stdout and stderr shared render in result_text_area
-
+        if stderr_shared.read().unwrap().len() + stdout_shared.read().unwrap().len()
+            <= (selected_line) as usize
+        {
+            selected_line =
+                (stderr_shared.read().unwrap().len() + stdout_shared.read().unwrap().len() - 1)
+                    .try_into()
+                    .unwrap_or(0);
+        }
         // Render in UI
         backend.draw(|frame| {
             show_ui(
